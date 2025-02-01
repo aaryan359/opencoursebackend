@@ -22,9 +22,8 @@ app.use(cookieParser());
 
 // Middleware
 app.use(cors({
-  origin: "*", // Allow all origins (For development only)
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  origin: 'https://opencoursem.netlify.app', 
+  credentials: true // Allow cookies to be sent
 }));
 
 
