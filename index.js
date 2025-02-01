@@ -22,8 +22,9 @@ app.use(cookieParser());
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173', 
-  credentials: true // Allow cookies to be sent
+  origin: "*", // Allow all origins (For development only)
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 
