@@ -7,9 +7,10 @@ const verifyJWT = async (req, res, next) => {
 
   
     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+    console.log("token is")
     
 
-    // Check if token exists
+    // Check if token exist
     if (!token) {
       throw new Error(401, "Please log in first.");
 
