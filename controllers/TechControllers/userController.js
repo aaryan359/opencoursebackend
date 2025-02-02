@@ -119,7 +119,7 @@ const loginUser = async (req, res) => {
    );
   
    const options = {
-    httpOnly: false, // enable client-side JavaScript from accessing the cookie
+    httpOnly: true, // enable client-side JavaScript from accessing the cookie
     secure: true,   // Ensures cookies are only sent over HTTPS
     sameSite: 'none', // Allows cross-origin cookies
     path: '/',      // The cookie is available across the entire site
