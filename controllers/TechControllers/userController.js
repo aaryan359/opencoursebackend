@@ -89,6 +89,7 @@ const registerUser = async (req, res) => {
 
 
 
+
 // tested api 
 // Login a user
 const loginUser = async (req, res) => {
@@ -118,11 +119,12 @@ const loginUser = async (req, res) => {
    );
   
    const options = {
-    httpOnly: true, // true if you don't need to access the cookie via JavaScript
-    secure: true,  // Set to false for local development
-    sameSite: 'None', // Use 'Lax' for simple cross-origin requests
-    path: '/' // The cookie is available within the entire site
-};
+    httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+    secure: true,   // Ensures cookies are only sent over HTTPS
+    sameSite: 'none', // Allows cross-origin cookies
+    path: '/',      // The cookie is available across the entire site
+    domain: '.opencoursem.netlify.app' // Correct domain (no protocol or path)
+  };
   
 
 
