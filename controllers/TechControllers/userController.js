@@ -112,8 +112,17 @@ const loginUser = async (req, res) => {
 
     if (!isMatch) {
       return res.status(401).json({ error: 'Password dosen`t match' });
+
     }
 
+    const token = jwt.sign(
+      { id: user._id },
+
+       process.env.JWT_SECRET,
+       
+      { expiresIn: '1d' });
+
+     
    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
       user._id
    );
@@ -145,6 +154,7 @@ const loginUser = async (req, res) => {
       user,
       accessToken,
       refreshToken,
+      token
     },
     message: "User logged in successfully",
   });

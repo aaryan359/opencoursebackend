@@ -28,7 +28,7 @@ const verifyJWT = async (req, res, next) => {
       throw new Error(401, "Invalid or expired token.");
     }
 
-    const user = await User.findById(decodedToken?._id).select("-password -refreshToken");
+    const user = await User.findById(decodedToken?._id);
 
    
     if (!user) {
@@ -40,7 +40,7 @@ const verifyJWT = async (req, res, next) => {
     req.user = user;
 
     // Move to the next middleware
-    
+
     next();
   } catch (error) {
     
