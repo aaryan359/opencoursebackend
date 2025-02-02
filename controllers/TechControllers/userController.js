@@ -128,10 +128,12 @@ const loginUser = async (req, res) => {
   
 
 
+
   console.log("options ",options);
 
 
-  
+  console.log("access token",accessToken);
+  console.log('referesh token',refreshToken);
 
   return res
   .status(200)
