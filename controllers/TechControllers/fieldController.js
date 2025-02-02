@@ -223,7 +223,7 @@ const addVideoToSubtopic = async (req, res) => {
     res.status(200).json({ message: "Video uploaded successfully", video: newVideo });
 
   } catch (error) {
-    console.error("Error uploading video:", error);
+    console.error("Error uploading video:", error.message);
     res.status(500).json({ error: "Failed to upload video" });
   }
 };

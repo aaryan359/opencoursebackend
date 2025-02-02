@@ -7,7 +7,7 @@ const verifyJWT = async (req, res, next) => {
 
   
     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
-    console.log("token is")
+    console.log("token is",token)
     
 
     // Check if token exist
@@ -40,6 +40,7 @@ const verifyJWT = async (req, res, next) => {
     req.user = user;
 
     // Move to the next middleware
+    
     next();
   } catch (error) {
     
