@@ -21,7 +21,7 @@ const verifyJWT = async (req, res, next) => {
 
     // Verify the token and extract the payload
     try {
-      decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+      decodedToken = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decodedToken;
 
     } catch (error) {
