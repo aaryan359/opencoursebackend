@@ -132,7 +132,8 @@ const loginUser = async (req, res) => {
     secure: true,   // Ensures cookies are only sent over HTTPS
     sameSite: 'none', // Allows cross-origin cookies
     path: '/',      // The cookie is available across the entire site
-    domain: '.opencoursem.netlify.app' // Correct domain (no protocol or path)
+    domain: '.opencoursem.netlify.app' ,// Correct domain (no protocol or path)
+    maxAge: 24 * 60 * 60 * 1000, // 7 days
   };
   
 
