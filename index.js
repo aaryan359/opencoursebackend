@@ -20,12 +20,10 @@ const app = express();
 
 app.use(cookieParser());
 
-// Middleware
 app.use(cors({
-  origin: 'https://opencoursem.netlify.app', 
+  origin: 'https://opencoursebackend.onrender.com', 
   credentials: true // Allow cookies to be sent
 }));
-
 
 
 

@@ -121,12 +121,14 @@ const loginUser = async (req, res) => {
        process.env.JWT_SECRET,
        
       { expiresIn: '1d' });
+      console.log(" token in backend",token)
 
      
    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
       user._id
    );
   
+
    const options = {
     httpOnly: true, // enable client-side JavaScript from accessing the cookie
     secure: true,   // Ensures cookies are only sent over HTTPS
