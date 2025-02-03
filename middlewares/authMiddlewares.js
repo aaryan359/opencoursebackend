@@ -1,6 +1,8 @@
 const User = require('../models/TechSection/User');
 const jwt = require('jsonwebtoken');
 
+const env = require('dotenv');
+env.config();
 
 const verifyJWT = async (req, res, next) => {
   try {
@@ -12,6 +14,7 @@ const verifyJWT = async (req, res, next) => {
 
     // Check if token exist
     if (!token) {
+      
       throw new Error(401, "Please log in first.");
 
     }
@@ -23,16 +26,16 @@ const verifyJWT = async (req, res, next) => {
     try {
       decodedToken = jwt.verify(token, process.env.JWT_SECRET);
       req.user = decodedToken;
-
+      console.log("token decode",decodedToken);
     } catch (error) {
-      throw new Error(401, "Invalid or expired token.");
+      throw new Error(402, "Invalid or expired token.");
     }
 
     const user = await User.findById(decodedToken?._id);
-
+    console.log("user decode",user);
    
     if (!user) {
-      throw new Error(401, "User not found. Please log in again.");
+      throw new Error(403, "User not found. Please log in again.");
 
     }
 
