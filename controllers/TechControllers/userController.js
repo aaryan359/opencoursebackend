@@ -129,34 +129,34 @@ const loginUser = async (req, res) => {
    );
   
 
-   const options = {
-    httpOnly: true, // enable client-side JavaScript from accessing the cookie
-    secure: true,   // Ensures cookies are only sent over HTTPS
-    sameSite: 'none', // Allows cross-origin cookies
-    path: '/',      // The cookie is available across the entire site
-    domain: '.opencoursem.netlify.app' ,// Correct domain (no protocol or path)
-    maxAge: 24 * 60 * 60 * 1000, // 7 days
-  };
+  //  const options = {
+  //   httpOnly: true, // enable client-side JavaScript from accessing the cookie
+  //   secure: true,   // Ensures cookies are only sent over HTTPS
+  //   sameSite: 'none', // Allows cross-origin cookies
+  //   path: '/',      // The cookie is available across the entire site
+  //   domain: '.opencoursem.netlify.app' ,// Correct domain (no protocol or path)
+  //   maxAge: 24 * 60 * 60 * 1000, // 7 days
+  // };
   
 
 
 
-  console.log("options ",options);
+  // console.log("options ",options);
 
 
-  console.log("access token",accessToken);
-  console.log('referesh token',refreshToken);
+  // console.log("access token",accessToken);
+  // console.log('referesh token',refreshToken);
 
   return res
   .status(200)
-  .cookie("accessToken", accessToken, options)
-  .cookie("refreshToken", refreshToken, options)
+  // .cookie("accessToken", accessToken, options)
+  // .cookie("refreshToken", refreshToken, options)
   .json({
     status: 200, 
     data: {
       user,
-      accessToken,
-      refreshToken,
+      // accessToken,
+      // refreshToken,
       token
     },
     message: "User logged in successfully",
