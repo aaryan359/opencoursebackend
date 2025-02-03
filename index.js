@@ -18,10 +18,10 @@ const interviewRoutes = require('./routes/InterviewSectionRouting/interviewRoute
 
 const app = express();
 
-app.use(cookieParser());
+// app.use(cookieParser());
 
 app.use(cors({
-  origin: 'https://opencoursebackend.onrender.com', 
+  origin: 'https://opencoursem.netlify.app', 
   credentials: true // Allow cookies to be sent
 }));
 

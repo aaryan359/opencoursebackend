@@ -124,9 +124,9 @@ const loginUser = async (req, res) => {
       console.log(" token in backend",token)
 
      
-   const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
-      user._id
-   );
+  //  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
+  //     user._id
+  //  );
   
 
   //  const options = {
