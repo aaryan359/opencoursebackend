@@ -31,6 +31,7 @@ const verifyJWT = async (req, res, next) => {
 
     const user = await User.findById(decodedToken?._id);
     console.log("User found:", user);
+     
 
     if (!user) {
       return res.status(403).json({ message: "User not found. Please log in again." });
@@ -38,10 +39,13 @@ const verifyJWT = async (req, res, next) => {
 
     req.user = user;
     next();
-  } catch (error) {
+
+   } catch (error)
+   {
     console.error("Error in verifyJWT:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
+
 };
 
 module.exports = { verifyJWT };

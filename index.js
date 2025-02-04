@@ -1,29 +1,25 @@
-// server.js
 const express = require('express');
 const cors = require('cors');
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-const passport = require('passport');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const field = require('./routes/Techroutes/fieldsRoutes');
 const nontechfieldroutes   = require('./routes/NontechRouting/nontechRoutes')
 const Interviewroutes   = require('./routes/InterviewSectionRouting/InterviewRouting')
-
 const authMiddleware = require('./middlewares/authMiddlewares');
-
 const interviewRoutes = require('./routes/InterviewSectionRouting/interviewRoutes')
 
- // Import passport setup
+
+
 
 const app = express();
 
-// app.use(cookieParser());
+
+
 
 app.use(cors({
   origin: 'https://opencoursem.netlify.app', 
-  credentials: true // Allow cookies to be sent
 }));
+
 
 
 
@@ -38,21 +34,6 @@ app.use(express.urlencoded({ extended: true }));
 connectDB();
 
 
-// Express session
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-}));
-
-
-
-
-
-// Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
-
 
 
 
@@ -66,7 +47,6 @@ app.use('/auth', userRoutes);
 app.use('/user',field);
 app.use('/nontech',nontechfieldroutes );
 app.use('/Interview',Interviewroutes );
-
 
 app.use('/interview',interviewRoutes)
 

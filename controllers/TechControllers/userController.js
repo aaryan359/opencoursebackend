@@ -1,171 +1,131 @@
-const User = require('../../models/TechSection/User');
+const User = require("../../models/TechSection/User");
 
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
-const jwt = require('jsonwebtoken');
-
-
+const jwt = require("jsonwebtoken");
 
 const generateAccessAndRefreshTokens = async (userId) => {
-  try {
-    const user = await User.findById(userId);
+	try {
+		const user = await User.findById(userId);
 
-    if (!user) throw new ApiError(404, "User not found");
+		if (!user) throw new ApiError(404, "User not found");
 
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
+		const accessToken = user.generateAccessToken();
+		const refreshToken = user.generateRefreshToken();
 
-    user.refreshToken = refreshToken;
-    await user.save({ validateBeforeSave: false });
+		user.refreshToken = refreshToken;
+		await user.save({ validateBeforeSave: false });
 
-    return { accessToken, refreshToken };
-  } catch (error) {
-    throw new ApiError(500, "Something went wrong while generating tokens");
-  }
+		return { accessToken, refreshToken };
+	} catch (error) {
+		throw new ApiError(
+			500,
+			"Something went wrong while generating tokens"
+		);
+	}
 };
-
-
 
 // Register a new user
 // tested api
 
 const registerUser = async (req, res) => {
+	const { username, email, password, expertise, experience, portfolio } =
+		req.body;
 
-  const { username, email, password, expertise, experience, portfolio } = req.body;
+	try {
+		// Check if user already exists
+		const existingUser = await User.findOne({ email });
 
-  try {
+		if (existingUser) {
+			return res
+				.status(400)
+				.json({
+					error: "User already exists with this email",
+				});
+		}
 
+		// Hash password
+		const hashedPassword = await bcrypt.hash(password, 10);
 
+		// Create new user
+		const user = new User({
+			username,
+			email,
+			password: hashedPassword,
+			expertise,
+			experience,
+			portfolio,
+		});
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
+		// Save the user to the database
+		await user.save();
 
-    
-    if (existingUser) {
-      return res.status(400).json({ error: 'User already exists with this email' });
-    }
+		// Generate JWT token
+		const token = jwt.sign(
+			{ id: user._id },
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+			process.env.JWT_SECRET,
 
+			{ expiresIn: "1d" }
+		);
 
-
-     
-    // Create new user
-    const user = new User({
-      username,
-      email,
-      password: hashedPassword,
-      expertise,
-      experience,
-      portfolio,
-    });
-
-
-
-    // Save the user to the database
-    await user.save();
-
- 
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: user._id },
-
-       process.env.JWT_SECRET,
-       
-        { expiresIn: '1d' });
-
-
-       
-    // Send token to client
-    res.status(201).json({ token });
-
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+		// Send token to client
+		res.status(201).json({ token });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
 };
 
 
-
-
-// tested api 
+// tested api
 // Login a user
 const loginUser = async (req, res) => {
 
-  const { email, password } = req.body;
 
+	const { email, password } = req.body;
 
-  
-  try {
-    // Find user by email
-    const user = await User.findOne({ email });
+	try {
 
+		// Find user by email
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+		const user = await User.findOne({ email });
 
-    // Check if password matches
-    const isMatch = await bcrypt.compare(password, user.password);
+		if (!user) {
+			return res
+				.status(404)
+				.json({ error: "User not found" });
+		}
 
-    if (!isMatch) {
-      return res.status(401).json({ error: 'Password dosen`t match' });
+		// Check if password matches
+		const isMatch = await bcrypt.compare(password, user.password);
 
-    }
+		if (!isMatch) {
+			return res
+				.status(401)
+				.json({ error: "Password dosen`t match" });
+		}
 
-    const token = jwt.sign(
-      { id: user._id },
+		const token = jwt.sign(
+			{ id: user._id },
 
-       process.env.JWT_SECRET,
-       
-      { expiresIn: '1d' });
-      console.log(" token in backend",token)
+			process.env.JWT_SECRET,
 
-     
-  //  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
-  //     user._id
-  //  );
-  
+			{ expiresIn: "1d" }
+		);
 
-  //  const options = {
-  //   httpOnly: true, // enable client-side JavaScript from accessing the cookie
-  //   secure: true,   // Ensures cookies are only sent over HTTPS
-  //   sameSite: 'none', // Allows cross-origin cookies
-  //   path: '/',      // The cookie is available across the entire site
-  //   domain: '.opencoursem.netlify.app' ,// Correct domain (no protocol or path)
-  //   maxAge: 24 * 60 * 60 * 1000, // 7 days
-  // };
-  
+		console.log(" token in backend", token);
 
-
-
-  // console.log("options ",options);
-
-
-  // console.log("access token",accessToken);
-  // console.log('referesh token',refreshToken);
-
-  return res
-  .status(200)
-  // .cookie("accessToken", accessToken, options)
-  // .cookie("refreshToken", refreshToken, options)
-  .json({
-    status: 200, 
-    data: {
-      user,
-      // accessToken,
-      // refreshToken,
-      token
-    },
-    message: "User logged in successfully",
-  });
-
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+		return res.status(200).json({
+			status: 200,
+			data: {
+				user,
+				token,
+			},
+			message: "User logged in successfully",
+		});
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
 };
 
 
@@ -174,76 +134,69 @@ const loginUser = async (req, res) => {
 
 // Get user profile (protected route)
 const getUserProfile = async (req, res) => {
-  try {
-    // `req.user` is added by `authMiddleware`
-    const user = await User.findById(req.user._id).populate('videos fields');
+	try {
+		// `req.user` is added by `authMiddleware`
+		const user = await User.findById(req.user._id).populate(
+			"videos fields"
+		);
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+		if (!user) {
+			return res
+				.status(404)
+				.json({ error: "User not found" });
+		}
 
-    res.json(user);
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+		res.json(user);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
 };
-
-
-
 
 // Update user profile
 const updateUserProfile = async (req, res) => {
-    // taking is updated input form user 
+	// taking is updated input form user
 
-  const { username, expertise, experience, portfolio } = req.body;
+	const { username, expertise, experience, portfolio } = req.body;
 
-  // find that if user is exxist or not 
-  try {
-    const user = await User.findById(req.user._id);
+	// find that if user is exxist or not
+	try {
+		const user = await User.findById(req.user._id);
 
+		if (!user) {
+			return res
+				.status(404)
+				.json({ error: "User not found" });
+		}
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+		// Update fields
 
+		user.username = username || user.username;
+		user.expertise = expertise || user.expertise;
+		user.experience = experience || user.experience;
+		user.portfolio = portfolio || user.portfolio;
 
-    // Update fields
-
-    user.username = username || user.username;
-    user.expertise = expertise || user.expertise;
-    user.experience = experience || user.experience;
-    user.portfolio = portfolio || user.portfolio;
-
-    // save updated user in db
-    await user.save();
-    res.json(user);
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+		// save updated user in db
+		await user.save();
+		res.json(user);
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
 };
-
-
-
-
 
 // Delete a user
 const deleteUser = async (req, res) => {
-  try {
-    await User.findByIdAndDelete(req.user._id);
-    res.json({ message: 'User deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+	try {
+		await User.findByIdAndDelete(req.user._id);
+		res.json({ message: "User deleted successfully" });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
 };
 
-
-
 module.exports = {
-  registerUser,
-  loginUser,
-  getUserProfile,
-  updateUserProfile,
-  deleteUser,
+	registerUser,
+	loginUser,
+	getUserProfile,
+	updateUserProfile,
+	deleteUser,
 };
