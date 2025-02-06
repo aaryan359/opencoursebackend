@@ -93,7 +93,7 @@ const loginUser = async (req, res) => {
 		if (!user) {
 			return res
 				.status(404)
-				.json({ error: "User not found" });
+				.json({ message: "User not found" });
 		}
 
 		// Check if password matches
@@ -102,7 +102,7 @@ const loginUser = async (req, res) => {
 		if (!isMatch) {
 			return res
 				.status(401)
-				.json({ error: "Password dosen`t match" });
+				.json({ message: "Password dosen`t match" });
 		}
 
 		const token = jwt.sign(

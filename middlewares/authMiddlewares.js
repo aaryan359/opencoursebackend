@@ -23,12 +23,10 @@ const verifyJWT = async (req, res, next) => {
     try {
 
       decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("Decoded Token:", decodedToken);
 
     }
      catch (error)
       {
-      console.error("JWT Verification Error:", error.message);
       return res.status(401).json({ message: "Invalid or expired token." });
     }
 
