@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 
+
 const verifyJWT = async (req, res, next) => {
   try {
     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
@@ -15,8 +16,10 @@ const verifyJWT = async (req, res, next) => {
       return res.status(401).json({ message: "Please log in first." });
     }
 
+    
     // Verify the token
     let decodedToken;
+    
     try {
 
       decodedToken = jwt.verify(token, process.env.JWT_SECRET);

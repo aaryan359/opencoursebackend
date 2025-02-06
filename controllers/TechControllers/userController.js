@@ -116,16 +116,19 @@ const loginUser = async (req, res) => {
 		console.log(" token in backend", token);
 
 		return res.status(200).json({
-			status: 200,
 			data: {
 				user,
 				token,
 			},
 			message: "User logged in successfully",
 		});
-	} catch (error) {
+		
+	} 
+	catch (error)
+	 {
 		res.status(500).json({ error: error.message });
-	}
+
+	 }
 };
 
 
@@ -151,6 +154,8 @@ const getUserProfile = async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 };
+
+
 
 // Update user profile
 const updateUserProfile = async (req, res) => {

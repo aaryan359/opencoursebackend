@@ -17,7 +17,8 @@ const app = express();
 
 
 app.use(cors({
-  origin: 'https://opencoursem.netlify.app', 
+  origin: ['http://localhost:5173', 'https://opencoursem.netlify.app']
+
 }));
 
 
@@ -43,25 +44,11 @@ connectDB();
 // Routes
 
 app.use('/auth', userRoutes);
-
 app.use('/user',field);
 app.use('/nontech',nontechfieldroutes );
 app.use('/Interview',Interviewroutes );
 
 app.use('/interview',interviewRoutes)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
