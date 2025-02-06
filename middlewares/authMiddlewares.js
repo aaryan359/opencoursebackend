@@ -16,7 +16,7 @@ const verifyJWT = async (req, res, next) => {
       return res.status(401).json({ message: "Please log in first." });
     }
 
-    
+
     // Verify the token
     let decodedToken;
     
@@ -32,7 +32,7 @@ const verifyJWT = async (req, res, next) => {
       return res.status(401).json({ message: "Invalid or expired token." });
     }
 
-    const user = await User.findById(decodedToken?._id);
+    const user = await User.findById(decodedToken?.id);
     console.log("User found:", user);
      
 
